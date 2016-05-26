@@ -8,7 +8,7 @@ This plugin enables movie playback in OpenSesame using the MoviePy module. To us
 
 This module depends on the following other libraries. So make sure you have them installed if you run OpenSesame from source (the distributed versions of OpenSesame should already contain these libraries, so no further action is required.)
 
-- mediadecoder (http://github.com/python-mediadecoder)
+- mediadecoder (http://github.com/dschreij/python-mediadecoder)
 - MoviePy (http://zulko.github.io/moviepy/)
 - pyAudio (https://people.csail.mit.edu/hubert/pyaudio/)
 - pygame (http://www.pygame.org/)
