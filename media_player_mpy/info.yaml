@@ -1,0 +1,69 @@
+author: "Daniel Schreij"
+category: "Visual stimuli"
+description: Media player based on the moviepy library which uses ffmpeg
+url: "https://github.com/dschreij/media_player_mpy"
+version: "0.1.1"
+controls:
+  -
+    name: "video_file"
+    label: "Video file"
+    tooltip: "A video file"
+    type: filepool
+    var: video_src
+  -
+    name: "play_audio"
+    label: "Play audio"
+    options:
+      - "yes"
+      - "no"
+    tooltip: "Specifies if the video has to be played with audio, or in silence"
+    type: combobox
+    var: playaudio
+  -
+    name: "loop_video"
+    label: "Loop"
+    options:
+      - "yes"
+      - "no"
+    tooltip: "Specifies if the video should loop"
+    type: combobox
+    var: loop
+  -
+    name: "fit_video_on_screen"
+    label: "Fit video to screen"
+    options:
+      - "yes"
+      - "no"
+    tooltip: "Specifies if the video has to be stretched over the screen width"
+    type: combobox
+    var: resizeVideo
+  -
+    name: "call_custom_python_code"
+    label: "Call custom Python code"
+    name: combobox_event_handler_trigger
+    options:
+      - "on keypress"
+      - "after every frame"
+    tooltip: "Determine when the custom event handling code is called."
+    type: combobox
+    var: event_handler_trigger
+  -
+    name: "duration"
+    label: Duration
+    name: line_edit_duration
+    tooltip: "Expecting a value in milliseconds, 'full', 'mouseclick' or 'keypress'"
+    type: line_edit
+    var: duration
+    validator: duration
+  -
+    name: "custom_python_code"
+    label: "Custom Python code (See Help for more information)"
+    syntax: true
+    tooltip: "Specify how you would like to handle events like mouse clicks or keypresses. When set, this overrides the Duration attribute"
+    type: editor
+    var: event_handler
+  -
+    name: "info_label"
+    label: "<small><b>Media Player OpenSesame Plugin 0.1.0, Copyright (2010-2015) Daniel Schreij</b></small>"
+    type: text
+
