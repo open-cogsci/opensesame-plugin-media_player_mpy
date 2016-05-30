@@ -2,7 +2,7 @@ author: "Daniel Schreij"
 category: "Visual stimuli"
 description: Media player based on the moviepy library which uses ffmpeg
 url: "https://github.com/dschreij/media_player_mpy"
-version: "0.1.1"
+version: "0.1.2"
 controls:
   -
     name: "video_file"

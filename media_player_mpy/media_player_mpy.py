@@ -42,7 +42,6 @@ import time
 from OpenGL.GL import *
 
 import mediadecoder
-from mediadecoder.soundrenderers import *
 
 class media_player_mpy(item):
 	description = u'Media player based on moviepy'
@@ -64,7 +63,7 @@ class media_player_mpy(item):
 		self.var.loop 				= u"no"
 		self.var.event_handler_trigger = u"on keypress"
 		self.var.event_handler 		= u""
-		self.var.soundrenderer 		= "pygame"
+		self.var.soundrenderer 		= "sounddevice"
 
 		# Set default internal variables
 		self.__frame_updated 		= False
@@ -120,9 +119,15 @@ class media_player_mpy(item):
 		# Set audiorenderer
 		if self.var.playaudio == u"yes" and self.player.audioformat:
 			if self.var.soundrenderer == u"pygame":
+				from mediadecoder.soundrenderers import SoundrendererPygame
 				self.audio_handler = SoundrendererPygame(self.player.audioformat)
 			elif self.var.soundrenderer == u"pyaudio":
+				from mediadecoder.soundrenderers import SoundrendererPyAudio
 				self.audio_handler = SoundrendererPyAudio(self.player.audioformat)
+			elif self.var.soundrenderer == u"sounddevice":
+				from mediadecoder.soundrenderers import SoundrendererSounddevice
+				self.audio_handler = SoundrendererSounddevice(self.player.audioformat)
+
 			self.player.set_audiorenderer(self.audio_handler)
 
 		self.vid_size = self.player.clip.size
