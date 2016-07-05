@@ -327,7 +327,7 @@ class qtmedia_player_mpy(media_player_mpy, qtautoplugin):
 			self.loop_video.editTextChanged.connect(self.check_for_infinite_loops)
 
 		self.line_edit_duration.editingFinished.connect(self.check_for_infinite_loops)
-		self.check_available_soundrenderers()
+		#self.check_available_soundrenderers()
 
 	def set_soundrenderer_status(self, value):
 		""" Enables or disables the soundrenderer combo box, depending on the
