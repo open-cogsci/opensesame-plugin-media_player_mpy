@@ -12,7 +12,7 @@ The plugin offers the following configuration options from the GUI:
 - *Video file* - the video file to be played. This field allows variable notations such as [video_file], of which you can specify the value in loop items.
 - *Play audio* - specifies whether the video is to be played with audio or in silence (muted).
 - *Fit video to screen* - specifies whether the video should be played in its original size, or if it should be scaled to fit the size of the window/screen. The rescaling procedure maintains the original aspect ratio of the movie.
-- *Loop playback* - specifies if the video should be looped, meaning that it will start again from the beginning once the end of of the movie is reached.
+- *Loop* - specifies if the video should be looped, meaning that it will start again from the beginning once the end of of the movie is reached.
 - *Duration* - Specifies how long the movie should be displayed. Expects a value in seconds, 'keypress' or 'mouseclick'. It it has one of the last values, playback will stop when a key is pressed or the mouse button is clicked.
 
 ## Custom Python code for handling keypress and mouseclick events

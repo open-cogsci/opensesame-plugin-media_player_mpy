@@ -39,8 +39,6 @@ from libopensesame.exceptions import osexception
 import os
 import time
 
-from OpenGL.GL import *
-
 import mediadecoder
 
 class media_player_mpy(item):
@@ -50,6 +48,10 @@ class media_player_mpy(item):
 	def frame_no(self):
 		return self.player.current_frame_no
 
+	@property
+	def times_played(self):
+		return self.player.loop_count
+	
 	def reset(self):
 		"""
 		desc:
@@ -87,8 +89,9 @@ class media_player_mpy(item):
 
 		# Byte-compile the event handling code (if any)
 		if self.var.event_handler.strip() != u"":
-			custom_event_handler = compile(self.var.event_handler, u"<string>", 
-				u"exec")
+			# custom_event_handler = compile(self.var.event_handler, u"<string>", 
+			# 	u"exec")
+			custom_event_handler = self.python_workspace._compile(self.var.event_handler)
 		else:
 			custom_event_handler = None
 
@@ -174,6 +177,7 @@ class media_player_mpy(item):
 
 		# Init texture lock to False
 		self.texture_locked = False
+
 		# Report success
 		return True
 
@@ -186,6 +190,14 @@ class media_player_mpy(item):
 		self.paused = False
 		keep_playing = True
 
+		self.experiment.cleanup_functions.extend([self.stop, self.close_audio])
+
+		# Set some variables in workspace for easy access in custom script
+		self.python_workspace['mov_width'] = self.dest_size[0]
+		self.python_workspace['mov_height'] = self.dest_size[1]
+		# User can simply call pause() to pause and unpause()
+		self.python_workspace['pause'] = self.pause
+		
 		# Prepare frame renderer in handler for playback
 		# (e.g. set up OpenGL context, thus only relevant for OpenGL based 
 		# backends)
@@ -225,6 +237,7 @@ class media_player_mpy(item):
 
 			if not keep_playing:
 				self.stop()
+				break
 
 			# Determine if playback should continue when a time limit is set
 			if type(self.var.duration) == int:
@@ -245,6 +258,7 @@ class media_player_mpy(item):
 	def close_audio(self):
 		if self.player.audioformat and hasattr(self,'audio_handler'):
 			self.audio_handler.close_stream()
+			self.player.audioformat = None
 
 	def calculate_scaled_resolution(self, screen_res, image_res):
 		"""Calculate image size so it fits the screen
@@ -283,9 +297,86 @@ class media_player_mpy(item):
 			self.player.pause()
 			self.paused = True
 
+
 class qtmedia_player_mpy(media_player_mpy, qtautoplugin):
 	def __init__(self, name, experiment, script=None):
 		# Call parent constructors.
 		media_player_mpy.__init__(self, name, experiment, script)
 		qtautoplugin.__init__(self, __file__)
+
+		# Connect playaudio value change to function that enables or disables
+		# sound renderer selection.
+		# Account for Qt4/5 inconsistency here
+		
+		try:
+			self.play_audio.currentTextChanged.connect(self.set_soundrenderer_status)
+		except:
+			self.play_audio.editTextChanged.connect(self.set_soundrenderer_status)
+		
+		# Init the setting for when the experiment is loaded.
+		if self.var.playaudio == "yes":
+			self.sound_renderer.setDisabled(False)
+		elif self.var.playaudio == "no":
+			self.sound_renderer.setDisabled(True)
+
+		# Issue a warning if user selects options that potentially cause an infinite
+		# loop
+		try:
+			self.loop_video.currentTextChanged.connect(self.check_for_infinite_loops)
+		except:
+			self.loop_video.editTextChanged.connect(self.check_for_infinite_loops)
+
+		self.line_edit_duration.editingFinished.connect(self.check_for_infinite_loops)
+		self.check_available_soundrenderers()
+
+	def set_soundrenderer_status(self, value):
+		""" Enables or disables the soundrenderer combo box, depending on the
+		selection of playaudio."""
+
+		if value == "yes":
+			self.sound_renderer.setDisabled(False)
+		elif value == "no":
+			self.sound_renderer.setDisabled(True)
+
+	def check_available_soundrenderers(self):
+		""" Removes sound renderes that are not available on the system."""
+		try:
+			import pygame
+		except:
+			i = self.sound_renderer.findText('pygame')
+			if i != -1:
+				self.sound_renderer.removeItem(i)
+
+		try:
+			import pyaudio
+		except:
+			i = self.sound_renderer.findText('pyaudio')
+			if i != -1:
+				self.sound_renderer.removeItem(i)
+
+		try:
+			import sounddevice
+		except:
+			i = self.sound_renderer.findText('sounddevice')
+			if i != -1:
+				self.sound_renderer.removeItem(i)
+
+	def check_for_infinite_loops(self, value=None):
+		loop_value = self.loop_video.currentText()
+		duration_value = self.line_edit_duration.text()
+
+		if loop_value == "yes" and duration_value == "sound":
+			self.extension_manager.fire('notify', 
+				message = '<strong>Warning</strong>: With the current combination'
+				' of <em>loop</em> and <em>duration</em> settings the video will'
+				' play forever',
+				category = 'warning',
+				timeout = 10000,
+				always_show = True)
+
+
+
+
+		
+
 

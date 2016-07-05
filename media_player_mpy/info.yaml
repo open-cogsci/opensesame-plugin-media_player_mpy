@@ -1,13 +1,13 @@
 author: "Daniel Schreij"
 category: "Visual stimuli"
-description: Media player based on the moviepy library which uses ffmpeg
-url: "https://github.com/dschreij/media_player_mpy"
-version: "0.1.2"
+description: Media player based on moviepy
+url: "https://github.com/dschreij/opensesame-plugin-mediaplayer"
+icon: "vlc"
+version: "0.1.3"
 controls:
   -
     name: "video_file"
     label: "Video file"
-    tooltip: "A video file"
     type: filepool
     var: video_src
   -
@@ -16,25 +16,34 @@ controls:
     options:
       - "yes"
       - "no"
-    tooltip: "Specifies if the video has to be played with audio, or in silence"
     type: combobox
     var: playaudio
+  -
+    name: "sound_renderer"
+    label: "Sound renderer"
+    options:
+      - "pygame"
+      - "pyaudio"
+      - "sounddevice"
+    info: "The library to use for sound rendering (recommended: sounddevice)"
+    type: combobox
+    var: soundrenderer
   -
     name: "loop_video"
     label: "Loop"
     options:
       - "yes"
       - "no"
-    tooltip: "Specifies if the video should loop"
+    info: "Restart the video after it ends."
     type: combobox
     var: loop
   -
-    name: "fit_video_on_screen"
+    name: "resize_video"
     label: "Fit video to screen"
     options:
       - "yes"
       - "no"
-    tooltip: "Specifies if the video has to be stretched over the screen width"
+    info: "Maintains the aspect ratio."
     type: combobox
     var: resizeVideo
   -
@@ -44,14 +53,13 @@ controls:
     options:
       - "on keypress"
       - "after every frame"
-    tooltip: "Determine when the custom event handling code is called."
+    info: "When to call custom event handling code (if any)."
     type: combobox
     var: event_handler_trigger
   -
-    name: "duration"
     label: Duration
     name: line_edit_duration
-    tooltip: "Expecting a value in milliseconds, 'full', 'mouseclick' or 'keypress'"
+    info: "Expecting a value in milliseconds, 'sound', 'mouseclick' or 'keypress'"
     type: line_edit
     var: duration
     validator: duration
@@ -64,6 +72,6 @@ controls:
     var: event_handler
   -
     name: "info_label"
-    label: "<small><b>Media Player OpenSesame Plugin 0.1.0, Copyright (2010-2015) Daniel Schreij</b></small>"
+    label: "<small><b>Media Player OpenSesame Plugin 0.1.3, Copyright (2015-2016) Daniel Schreij</b></small>"
     type: text
 

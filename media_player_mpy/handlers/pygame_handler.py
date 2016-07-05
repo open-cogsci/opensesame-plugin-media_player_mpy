@@ -72,32 +72,40 @@ class PygameHandler(object):
 		False -- if a keypress or mouse click was detected (an OS indicates playback should be stopped then
 			or custom event code has returned False
 		"""
-
+		# By default, continue playback
+		keep_playing = True
 		for event in pygame.event.get():
-			if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+			if event.type == pygame.KEYDOWN:
 				# Catch escape presses
-				if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-					self.main_player.playing = False
-					raise osexception(u"The escape key was pressed")
+				if event.key == pygame.K_ESCAPE:
+					self.main_player.pause()
+					self.main_player.experiment.pause()
+					self.main_player.pause()
+				else:
+					# Check if user has entered custom event code. If duration is set
+					# to keypress or mouseclick, exit anyway.
+					if self.custom_event_code != None:
+						keep_playing = self.process_user_input_customized(("key", 
+							pygame.key.name(event.key)))
+						
+					# Stop experiment on keypress (if indicated as stopping method)
+					if self.main_player.duration == u"keypress":
+						self.main_player.experiment.response = pygame.key.name(event.key)
+						self.main_player.experiment.end_response_interval = pygame.time.get_ticks()
+						return False
 
-				if self.custom_event_code != None:
-					if event.type == pygame.KEYDOWN:
-						return self.process_user_input_customized(("key", pygame.key.name(event.key)))
-					elif event.type == pygame.MOUSEBUTTONDOWN:
-						return self.process_user_input_customized(("mouse", event.button))
-				# Stop experiment on keypress (if indicated as stopping method)
-				elif event.type == pygame.KEYDOWN and self.main_player.duration == u"keypress":
-					self.main_player.experiment.response = pygame.key.name(event.key)
-					self.main_player.experiment.end_response_interval = pygame.time.get_ticks()
-					return False
+			if event.type == pygame.MOUSEBUTTONDOWN:
 				# Stop experiment on mouse click (if indicated as stopping method)
-				elif event.type == pygame.MOUSEBUTTONDOWN and self.main_player.duration == u"mouseclick":
+				if self.custom_event_code != None:
+					keep_playing = self.process_user_input_customized(("mouse", event.button))
+
+				if self.main_player.duration == u"mouseclick":
 					self.main_player.experiment.response = event.button
 					self.main_player.experiment.end_response_interval = pygame.time.get_ticks()
 					return False
 
 		pygame.event.pump()
-		return True
+		return keep_playing
 
 	def process_user_input_customized(self, event=None):
 		"""
@@ -135,26 +143,25 @@ class PygameHandler(object):
 		continue_playback = True
 
 		# Variables for user to use in custom script
-		exp = self.main_player.experiment
-		frame = self.main_player.frame_no
-		mov_width = self.main_player.dest_size[0]
-		mov_height = self.main_player.dest_size[1]
-		times_played = self.main_player.times_played
-
-		# Easily callable pause function
-		# Use can now simply say pause() und unpause()
-
-		paused = self.main_player.paused # for checking if player is currently paused or not
-		pause = self.main_player.pause
+		try:
+			self.main_player.python_workspace['continue_playback'] = True
+			self.main_player.python_workspace['frame'] = self.main_player.frame_no
+			self.main_player.python_workspace['times_played'] = self.main_player.times_played
+			self.main_player.python_workspace['paused'] = self.main_player.paused
+			self.main_player.python_workspace['event'] = event
+		except Exception as e:
+			raise osexception("Error assigning variables in media_player: {}".format(e))
 
 		# Add more convenience functions?
 
 		try:
-			exec(self.custom_event_code)
+			self.main_player.python_workspace._exec(self.custom_event_code)
 		except Exception as e:
 			self.main_player.playing = False
 			raise osexception(u"Error while executing event handling code: %s" % e)
 
+		# Get potentially altered value of continue_playback from the workspace
+		continue_playback = self.main_player.python_workspace['continue_playback']
 		if type(continue_playback) != bool:
 			continue_playback = False
 
