@@ -35,6 +35,7 @@ setup(
 	author_email='dschreij@gmail.com',
 	url='https://github.com/dschreij/opensesame-plugin-mediaplayer',
 	license='MIT',
+	install_requires=['mediadecoder'],
 	classifiers=[
 		'Intended Audience :: Developers',
 		'Environment :: Console',
@@ -53,8 +54,6 @@ setup(
 		('share/opensesame_plugins/media_player_mpy', [
 			'media_player_mpy/media_player_mpy.py',
 			'media_player_mpy/media_player_mpy.md',
-			'media_player_mpy/media_player_mpy.png',
-			'media_player_mpy/media_player_mpy_large.png',
 			'media_player_mpy/info.yaml',
 			]),
 		('share/opensesame_plugins/media_player_mpy/handlers',

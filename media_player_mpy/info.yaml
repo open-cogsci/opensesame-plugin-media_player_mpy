@@ -3,7 +3,7 @@ category: "Visual stimuli"
 description: Media player based on moviepy
 url: "https://github.com/dschreij/opensesame-plugin-mediaplayer"
 icon: "vlc"
-version: "0.1.3"
+version: "0.1.4"
 controls:
   -
     name: "video_file"
@@ -72,6 +72,6 @@ controls:
     var: event_handler
   -
     name: "info_label"
-    label: "<small><b>Media Player OpenSesame Plugin 0.1.3, Copyright (2015-2016) Daniel Schreij</b></small>"
+    label: "<small><b>Media Player OpenSesame Plugin 0.1.4, Copyright (2015-2016) Daniel Schreij</b></small>"
     type: text
 
