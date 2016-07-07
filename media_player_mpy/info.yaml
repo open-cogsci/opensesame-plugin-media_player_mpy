@@ -2,8 +2,8 @@ author: "Daniel Schreij"
 category: "Visual stimuli"
 description: Media player based on moviepy
 url: "https://github.com/dschreij/opensesame-plugin-mediaplayer"
-icon: "vlc"
-version: "0.1.5"
+icon: "os-media_player_mpy"
+version: "0.1.6"
 controls:
   -
     name: "video_file"
@@ -34,7 +34,7 @@ controls:
     options:
       - "yes"
       - "no"
-    info: "Restart the video after it ends."
+    info: "Restart the video after it ends"
     type: combobox
     var: loop
   -
@@ -43,7 +43,7 @@ controls:
     options:
       - "yes"
       - "no"
-    info: "Maintains the aspect ratio."
+    info: "Maintains the aspect ratio"
     type: combobox
     var: resizeVideo
   -
@@ -53,13 +53,13 @@ controls:
     options:
       - "on keypress"
       - "after every frame"
-    info: "When to call custom event handling code (if any)."
+    info: "When to call custom event handling code (if any)"
     type: combobox
     var: event_handler_trigger
   -
     label: Duration
     name: line_edit_duration
-    info: "Expecting a value in milliseconds, 'sound', 'mouseclick' or 'keypress'"
+    info: "A value in milliseconds, 'sound', 'mouseclick', or 'keypress'"
     type: line_edit
     var: duration
     validator: duration
@@ -72,6 +72,5 @@ controls:
     var: event_handler
   -
     name: "info_label"
-    label: "<small><b>Media Player OpenSesame Plugin 0.1.4, Copyright (2015-2016) Daniel Schreij</b></small>"
+    label: "<small><b>Media Player OpenSesame Plugin, Copyright (2015-2016) Daniel Schreij</b></small>"
     type: text
-
