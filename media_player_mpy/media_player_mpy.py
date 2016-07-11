@@ -13,16 +13,6 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with OpenSesame.  If not, see <http://www.gnu.org/licenses/>.
-
-This module interfaces with the GStreamer framework through the
-Python bindings supplied with it. The module enables media playback functionality
-in the OpenSesame Experiment buider. In this module's current version, the
-GStreamer SDK (from http://www.gstreamer.com) is expected to be
-installed at its default location (in windows this is c:\gstreamer-sdk).
-If this is not the case in your situation, please change the GSTREAMER_PATH
-variable so that it points to the location at which you installed the
-GStreamer framework. This plugin should then automatically find all required
-libraries and Python modules.
 """
 
 __author__ = "Daniel Schreij"
@@ -220,9 +210,8 @@ class media_player_mpy(item):
 				# Reset updated flag
 				self.__frame_updated = False
 
-			# Draw the frame to backbuffer and show it on the screen
+			# Draw the movie frame to backbuffer.
 			self.handler.draw_frame()
-			self.handler.swap_buffers()
 
 			# #Handle input events
 			try:
@@ -234,6 +223,9 @@ class media_player_mpy(item):
 				self.stop()
 				self.close_audio()
 				raise e
+
+			# Show the frame on the screen
+			self.handler.swap_buffers()
 
 			if not keep_playing:
 				self.stop()
