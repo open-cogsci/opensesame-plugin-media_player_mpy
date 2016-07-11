@@ -134,6 +134,7 @@ class PsychopyHandler(OpenGLRenderer):
 
 		# Variables for user to use in custom script
 		try:
+			self.main_player.python_workspace['screen'] = self.win
 			self.main_player.python_workspace['continue_playback'] = True
 			self.main_player.python_workspace['frame'] = self.main_player.frame_no
 			self.main_player.python_workspace['times_played'] = self.main_player.times_played

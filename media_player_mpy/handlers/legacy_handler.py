@@ -44,27 +44,12 @@ class LegacyHandler(PygameHandler):
 			# some breathing space
 
 			if self.last_drawn_frame_no != self.main_player.frame_no:
-				# t1 = time.time()
 				pygame.surfarray.blit_array(self.src_surface, self.frame.swapaxes(0,1))
-				# stage1 = (time.time()-t1)*1000
-				# print("Blitting np array took {} ms".format(stage1))
 				
 				if self.main_player.var.resizeVideo == u"yes":
-					# t1 = time.time()
 					pygame.transform.scale(self.src_surface, self.main_player.dest_size, self.dest_surface)
-					# stage2 = (time.time()-t1)*1000
-					# print("Transforming took {} ms".format(stage2))
-					# If resize option is selected, resize frame to screen/window dimensions and blit
-					
-					# t1 = time.time()
 					self.screen.blit(self.dest_surface.convert(), self.main_player.vid_pos)
-					# stage3 = (time.time()-t1)*1000
-					# print("Blitting to screen took {} ms".format(stage3))
 				else:
-				# In case movie needs to be displayed 1-on-1 blit directly to screen
 					self.screen.blit(self.src_surface, self.main_player.vid_pos)
-				# print("------------------------------------")
-				# print("Total {} ms".format(stage1 + stage2 + stage3))
-				# print("====================================")
 				self.last_drawn_frame_no = self.main_player.frame_no
 
