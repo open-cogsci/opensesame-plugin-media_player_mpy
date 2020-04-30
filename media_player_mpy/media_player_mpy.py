@@ -291,6 +291,9 @@ class media_player_mpy(item):
 
 
 class qtmedia_player_mpy(media_player_mpy, qtautoplugin):
+	
+	lazy_init = False
+	
 	def __init__(self, name, experiment, script=None):
 		# Call parent constructors.
 		media_player_mpy.__init__(self, name, experiment, script)
@@ -370,5 +373,3 @@ class qtmedia_player_mpy(media_player_mpy, qtautoplugin):
 
 
 		
-
-
