@@ -72,5 +72,5 @@ controls:
     var: event_handler
   -
     name: "info_label"
-    label: "<small><b>Media Player OpenSesame Plugin, Copyright (2015-2016) Daniel Schreij</b></small>"
+    label: "<small><b>Media Player OpenSesame Plugin, Copyright (2015-2020) Daniel Schreij</b></small>"
     type: text
