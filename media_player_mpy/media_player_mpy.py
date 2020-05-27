@@ -136,7 +136,7 @@ class media_player_mpy(item):
 			(self.windowsize[1] - self.dest_size[1]) / 2)
 
 		# Set handler of frames and user input
-		if type(self.var.canvas_backend) in [unicode,str]:
+		if isinstance(self.var.canvas_backend, basestring):
 			if self.var.canvas_backend == u"legacy" or self.var.canvas_backend \
 				== u"droid":
 				from handlers import LegacyHandler
