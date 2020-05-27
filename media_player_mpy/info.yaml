@@ -3,7 +3,7 @@ category: "Visual stimuli"
 description: Media player based on moviepy
 url: "https://github.com/dschreij/opensesame-plugin-mediaplayer"
 icon: "os-media_player_mpy"
-version: "0.1.8"
+version: "0.1.9"
 controls:
   -
     name: "video_file"
