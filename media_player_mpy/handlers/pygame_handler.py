@@ -93,16 +93,22 @@ class PygameHandler(object):
 						self.main_player.experiment.response = pygame.key.name(event.key)
 						self.main_player.experiment.end_response_interval = pygame.time.get_ticks()
 						return False
-
-			if event.type == pygame.MOUSEBUTTONDOWN:
+			elif event.type == pygame.KEYUP and self.custom_event_code:
+				keep_playing = self.process_user_input_customized(
+					("keyup", pygame.key.name(event.key))
+				)
+			elif event.type == pygame.MOUSEBUTTONDOWN:
 				# Stop experiment on mouse click (if indicated as stopping method)
 				if self.custom_event_code != None:
 					keep_playing = self.process_user_input_customized(("mouse", event.button))
-
 				if self.main_player.duration == u"mouseclick":
 					self.main_player.experiment.response = event.button
 					self.main_player.experiment.end_response_interval = pygame.time.get_ticks()
 					return False
+			elif event.type == pygame.MOUSEBUTTONUP and self.custom_event_code:
+				keep_playing = self.process_user_input_customized(
+					("mouseup", event.button)
+				)
 
 		pygame.event.pump()
 		return keep_playing
@@ -128,14 +134,23 @@ class PygameHandler(object):
 			event = []  # List to contain collected info on key and mouse presses
 			for ev in events:
 				if ev.type == pygame.KEYDOWN and ev.key == pygame.K_ESCAPE:
+					# Exit on ESC press
 					self.main_player.playing = False
 					raise osexception(u"The escape key was pressed")
-				elif ev.type == pygame.KEYDOWN or ev.type == pygame.MOUSEBUTTONDOWN:
-					# Exit on ESC press
+				elif ev.type in (
+					pygame.KEYDOWN,
+					pygame.MOUSEBUTTONDOWN,
+					pygame.KEYUP,
+					pygame.MOUSEBUTTONUP
+				):
 					if ev.type == pygame.KEYDOWN:
 						event.append(("key", pygame.key.name(ev.key)))
+					elif ev.type == pygame.KEYUP:
+						event.append(("keyup", pygame.key.name(ev.key)))
 					elif ev.type == pygame.MOUSEBUTTONDOWN:
 						event.append(("mouse", ev.button))
+					elif ev.type == pygame.MOUSEBUTTONUP:
+						event.append(("mouseup", ev.button))
 			# If there is only one tuple in the list of collected events, take it out of the list
 			if len(event) == 1:
 				event = event[0]
