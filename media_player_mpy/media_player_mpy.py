@@ -76,12 +76,12 @@ class media_player_mpy(item):
 		"""
 		# Call parent functions.
 		item.prepare(self)
-
 		# Byte-compile the event handling code (if any)
-		if self.var.event_handler.strip() != u"":
-			# custom_event_handler = compile(self.var.event_handler, u"<string>", 
-			# 	u"exec")
-			custom_event_handler = self.python_workspace._compile(self.var.event_handler)
+		event_handler = self.var.get('event_handler', _eval=False)
+		if event_handler:
+			custom_event_handler = self.python_workspace._compile(
+				event_handler
+			)
 		else:
 			custom_event_handler = None
 
