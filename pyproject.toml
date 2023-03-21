@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "opensesame-plugin-media_player_mpy"
-version = "0.2.0"
+version = "0.2.1"
 description = "A video playback plugin for OpenSesame, based on MoviePy"
 authors = [
     "Daniel Schreij <dschreij@gmail.com>",
@@ -14,9 +14,7 @@ packages = [
 homepage = "https://osdoc.cogsci.nl"
 repository = "https://github.com/open-cogsci/opensesame-plugin-media_player_mpy"
 
-
 [tool.poetry.dependencies]
-opensesame-core = ">= 4.0.0a0"
 mediadecoder = "*"
 
 [build-system]
