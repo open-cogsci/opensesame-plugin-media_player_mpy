@@ -29,6 +29,13 @@ import time
 import mediadecoder
 
 
+class SoundRendererError(OSException):
+    """A `SoundRendererError` is raised when the `media_player_mpy` item could
+    not initialize the libraries required for sound playback. A possible 
+    workaround is to select a different sound renderer in the item controls.
+    """
+
+
 class MediaPlayerMpy(Item):
 
     @property
@@ -86,18 +93,35 @@ class MediaPlayerMpy(Item):
         # Set audiorenderer
         if self.var.playaudio == u"yes" and self.player.audioformat:
             if self.var.soundrenderer == u"pygame":
-                from mediadecoder.soundrenderers import SoundrendererPygame
-                self.audio_handler = SoundrendererPygame(
-                    self.player.audioformat)
+                try:
+                    from mediadecoder.soundrenderers import SoundrendererPygame
+                    self.audio_handler = SoundrendererPygame(
+                        self.player.audioformat)
+                except Exception as e:
+                    raise SoundRendererError(
+                        'Failed to initialize pygame sound render in '
+                        'media_player_mpy. You may want to select another '
+                        'sound renderer.')
             elif self.var.soundrenderer == u"pyaudio":
-                from mediadecoder.soundrenderers import SoundrendererPyAudio
-                self.audio_handler = SoundrendererPyAudio(
-                    self.player.audioformat)
+                try:
+                    from mediadecoder.soundrenderers import SoundrendererPyAudio
+                    self.audio_handler = SoundrendererPyAudio(
+                        self.player.audioformat)
+                except Exception as e:
+                    raise SoundRendererError(
+                        'Failed to initialize pyaudio sound render in '
+                        'media_player_mpy. You may want to select another '
+                        'sound renderer.')
             elif self.var.soundrenderer == u"sounddevice":
-                from mediadecoder.soundrenderers import SoundrendererSounddevice
-                self.audio_handler = SoundrendererSounddevice(
-                    self.player.audioformat)
-
+                try:
+                    from mediadecoder.soundrenderers import SoundrendererSounddevice
+                    self.audio_handler = SoundrendererSounddevice(
+                        self.player.audioformat)
+                except Exception as e:
+                    raise SoundRendererError(
+                        'Failed to initialize sounddevice sound render in '
+                        'media_player_mpy. You may want to select another '
+                        'sound renderer.')
             self.player.set_audiorenderer(self.audio_handler)
 
         self.vid_size = self.player.clip.size
