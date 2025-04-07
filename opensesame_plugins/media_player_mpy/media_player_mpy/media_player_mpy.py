@@ -234,7 +234,7 @@ class MediaPlayerMpy(Item):
     def close_audio(self):
         if self.player.audioformat and hasattr(self, 'audio_handler'):
             self.audio_handler.close_stream()
-            self.player.audioformat = None
+            # self.player.audioformat = None
 
     def calculate_scaled_resolution(self, screen_res, image_res):
         """Calculate image size so it fits the screen
