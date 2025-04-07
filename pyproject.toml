@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "opensesame-plugin-media_player_mpy"
-version = "0.2.2"
+version = "0.2.3"
 description = "A video playback plugin for OpenSesame, based on MoviePy"
 authors = [
     "Daniel Schreij <dschreij@gmail.com>",
